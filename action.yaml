@@ -3,10 +3,6 @@ name: Run updatecli and push to git
 author: PrefectHQ
 description: This action will run updatecli and push the changes to git and will also open a PR
 inputs:
-  github-token:
-    description: "The GitHub token to use for authentication"
-    default: ${{ github.token }}
-    required: true
   manifest-path:
     description: "Path to the updatecli manifest file"
     default: ".github/updatecli/manifest-minor.yaml"
@@ -51,7 +47,7 @@ runs:
         git commit -m "dependency-version-${{ inputs.run-type }}-${{ steps.date.outputs.date }}"
         git push --set-upstream origin "dependency-version-${{ inputs.run-type }}-${{ steps.date.outputs.date }}"
       env:
-        GITHUB_TOKEN: ${{ inputs.github-token }}
+        GITHUB_TOKEN: ${{ github.token }}
       shell: bash
 
     - name: create pr
@@ -60,5 +56,5 @@ runs:
         git checkout "dependency-version-${{ inputs.run-type }}-${{ steps.date.outputs.date }}"
         gh pr create --base main --title "dependency-version-${{ inputs.run-type }}-bump-${{ steps.date.outputs.date }}" -f --label soc2
       env:
-        GITHUB_TOKEN: ${{ inputs.github-token }}
+        GITHUB_TOKEN: ${{ github.token }}
       shell: bash

@@ -5,7 +5,6 @@ Action that runs updatecli, commits those changes if they exist, and opens a PR
 ## Inputs
 | Input | Description | Required |
 |-------|------------|----------|
-| github-token | The GitHub token to use for authentication. | true |
 | manifest-path | Path to the updatecli manifest file. | true |
 | run-type | The type of updatecli run to perform. (major or minor) | true |
 
