@@ -37,7 +37,7 @@ jobs:
       - name: checkout
         uses: actions/checkout@v4
       - name: updatecli-apply
-        uses: prefecthq/actions-updatecli-apply
+        uses: prefecthq/actions-updatecli-apply@main
         with:
           manifest-path: '.github/updatecli/manifest-minor.yaml'
           run-type: 'minor'
