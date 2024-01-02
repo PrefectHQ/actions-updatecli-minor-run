@@ -3,14 +3,18 @@ name: Run updatecli and push to git
 author: PrefectHQ
 description: This action will run updatecli and push the changes to git and will also open a PR
 inputs:
+  github-token:
+    description: "The GitHub token to use for authentication"
+    default: ${{ github.token }}
+    required: true
   manifest-path:
     description: "Path to the updatecli manifest file"
     default: ".github/updatecli/manifest-minor.yaml"
-    required: false
+    required: true
   run-type:
     description: "The type of updatecli run to perform (major or minor)"
     default: "minor"
-    required: false
+    required: true
 runs:
   using: composite
   steps:
