@@ -51,7 +51,7 @@ runs:
         git commit -m "dependency-version-${{ inputs.run-type }}-${{ steps.date.outputs.date }}"
         git push --set-upstream origin "dependency-version-${{ inputs.run-type }}-${{ steps.date.outputs.date }}"
       env:
-        GITHUB_TOKEN: ${{ github.token }}
+        GITHUB_TOKEN: ${{ inputs.github-token }}
       shell: bash
 
     - name: create pr
@@ -60,5 +60,5 @@ runs:
         git checkout "dependency-version-${{ inputs.run-type }}-${{ steps.date.outputs.date }}"
         gh pr create --base main --title "dependency-version-${{ inputs.run-type }}-bump-${{ steps.date.outputs.date }}" -f --label soc2
       env:
-        GITHUB_TOKEN: ${{ github.token }}
+        GITHUB_TOKEN: ${{ inputs.github-token }}
       shell: bash
