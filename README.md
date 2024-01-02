@@ -3,7 +3,7 @@
 Action that runs updatecli, commits those changes if they exist, and opens a PR
 
 ## Inputs
-| Input | Desription | Required |
+| Input | Description | Required |
 |-------|------------|----------|
 | manifest-path | Path to the updatecli manifest file. | true |
 | run-type | The type of updatecli run to perform. (major or minor) | true |
