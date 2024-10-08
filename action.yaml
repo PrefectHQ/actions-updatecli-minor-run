@@ -1,60 +1,81 @@
 ---
-name: Run updatecli and push to git
+name: Run updatecli and open a PR with changes
 author: PrefectHQ
 description: This action will run updatecli and push the changes to git and will also open a PR
 inputs:
   manifest-path:
-    description: "Path to the updatecli manifest file"
+    description: Path to the updatecli manifest file
     default: ".github/updatecli/manifest-minor.yaml"
     required: true
+  run-helm-docs:
+    description: Run helm-docs
+    default: "false"
+    required: true
   run-type:
-    description: "The type of updatecli run to perform (major or minor)"
+    description: The type of updatecli run to perform (major or minor)
     default: "minor"
     required: true
 runs:
   using: composite
   steps:
-    - id: configure_git
+    - name: Configure git
       run: |
         git config user.name "github-actions[bot]"
         git config user.email "github-actions[bot]@users.noreply.github.com"
       shell: bash
 
-    - name: Get current date
+    - name: Get current date & determine branch name
       id: date
-      run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+      run: |
+        echo "DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+        echo "BRANCH_NAME=dependency-version-${{ inputs.run-type }}-$DATE" >> $GITHUB_ENV
       shell: bash
 
-    - name: create branch for dependency version updates
-      run: git checkout -b "dependency-version-${{ inputs.run-type }}-${{ steps.date.outputs.date }}"
+    - name: Create branch for dependency version updates
+      run: |
+        git checkout -b $BRANCH_NAME
       shell: bash
 
-    - name: install updatecli in the runner
+    - name: Install updatecli in the runner
       uses: updatecli/updatecli-action@v2
 
-    - name: run updatecli in apply mode
+    - name: Run updatecli in apply mode
       id: updatecli_apply
       run: |
         updatecli apply --config ${{ inputs.manifest-path }} --experimental
         if [[ $(git diff --name-only | wc -l) -eq 0 ]]; then
           echo "No changes detected, exiting"
-          echo "changes=false" >> $GITHUB_OUTPUT
+          echo "CHANGES=false" >> $GITHUB_ENV
           exit 0
         else
-          echo "changes=true" >> $GITHUB_OUTPUT
+          echo "CHANGES=true" >> $GITHUB_ENV
         fi
         git add .
-        git commit -m "dependency-version-${{ inputs.run-type }}-${{ steps.date.outputs.date }}"
-        git push --set-upstream origin "dependency-version-${{ inputs.run-type }}-${{ steps.date.outputs.date }}"
+        git commit -m $BRANCH_NAME
+        git push --set-upstream origin $BRANCH_NAME
       env:
         GITHUB_TOKEN: ${{ github.token }}
       shell: bash
 
-    - name: create pr
+    - name: Install `helm-docs`
+      if: inputs.run-helm-docs == 'true' && env.CHANGES == 'true'
+      uses: jdx/mise-action@v2
+      with:
+        install_args: helm-docs
+
+    - name: Run `helm-docs`
+      if: inputs.run-helm-docs == 'true' && env.CHANGES == 'true'
+      run: |
+        helm-docs --template-files=README.md.gotmpl
+        git commit -am "helm-docs"
+        git push
+      shell: bash
+
+    - name: Create PR
       if: steps.updatecli_apply.outputs.changes == 'true'
       run: |
-        git checkout "dependency-version-${{ inputs.run-type }}-${{ steps.date.outputs.date }}"
-        gh pr create --base main --title "dependency-version-${{ inputs.run-type }}-bump-${{ steps.date.outputs.date }}" -f --label soc2
+        git checkout $BRANCH_NAME
+        gh pr create --base main --title $BRANCH_NAME -f --label soc2
       env:
-        GITHUB_TOKEN: ${{ github.token }}
+        GH_TOKEN: ${{ github.token }}
       shell: bash
