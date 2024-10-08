@@ -20,7 +20,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: updatecli-minor-apply
-        uses: prefecthq/actions-updatecli-apply@${{ github.head_ref }}
+        uses: ./github/workflows/validate-changes.yaml
         with:
           manifest-path: .github/updatecli/manifest.yaml
           run-type: minor
