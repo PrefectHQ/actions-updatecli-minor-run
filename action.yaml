@@ -43,7 +43,6 @@ runs:
       uses: updatecli/updatecli-action@v2
 
     - name: Run updatecli in apply mode
-      id: updatecli_apply
       run: |
         updatecli apply --config ${{ inputs.manifest-path }} --experimental
         if [[ $(git diff --name-only | wc -l) -eq 0 ]]; then
