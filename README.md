@@ -6,6 +6,7 @@ Action that runs updatecli, commits those changes if they exist, and opens a PR
 | Input | Description | Required |
 |-------|------------|----------|
 | manifest-path | Path to the updatecli manifest file. | true |
+| run-helm-docs | Run helm-docs | false |
 | run-type | The type of updatecli run to perform. (major or minor) | true |
 
 ## Usage
@@ -13,17 +14,8 @@ Action that runs updatecli, commits those changes if they exist, and opens a PR
 name: updatecli-minor
 "on":
   schedule:
-    #       ┌───────────── minute (0 - 59)
-    #       │  ┌───────────── hour (0 - 23)
-    #       │  │  ┌───────────── day of the month (1 - 31)
-    #       │  │  │ ┌───────────── month (1 - 12 or JAN-DEC)
-    #       │  │  │ │ ┌───────────── day of the week (0 - 6 or SUN-SAT)
-    #       │  │  │ │ │
-    #       │  │  │ │ │
-    #       │  │  │ │ │
     - cron: 0 15 * * 1  # Monday @ 3pm UTC
   workflow_dispatch:
-# Do not grant jobs any permissions by default
 permissions: {}
 jobs:
   updatecli:
