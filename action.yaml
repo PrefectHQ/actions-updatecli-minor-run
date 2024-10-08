@@ -24,10 +24,13 @@ runs:
         git config user.email "github-actions[bot]@users.noreply.github.com"
       shell: bash
 
-    - name: Get current date & determine branch name
-      id: date
+    - name: Get current date
       run: |
         echo "DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+      shell: bash
+
+    - name: Determine branch name
+      run: |
         echo "BRANCH_NAME=dependency-version-${{ inputs.run-type }}-$DATE" >> $GITHUB_ENV
       shell: bash
 
