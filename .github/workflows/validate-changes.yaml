@@ -8,9 +8,12 @@ permissions: {}
 
 jobs:
   validate_changes:
+    name: validate action changes
     runs-on: ubuntu-latest
     permissions:
+      # required to read from the repo
       contents: read
+      # required to read from the PR
       pull-requests: read
     steps:
       - name: checkout

@@ -14,9 +14,8 @@ jobs:
       # required to read from the repo
       contents: read
     steps:
-      - uses: actions/checkout@v4
-        with:
-          persist-credentials: false
+      - name: checkout
+        uses: actions/checkout@v4
 
       - name: Install tool dependencies
         uses: jdx/mise-action@v2
