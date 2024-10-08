@@ -1,0 +1,27 @@
+---
+name: Validate Changes to Workflow
+
+"on":
+  pull_request:
+    branches:
+      - main
+
+permissions: {}
+
+jobs:
+  validate_changes:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: updatecli-minor-apply
+        uses: prefecthq/actions-updatecli-apply@${{ github.head_ref }}
+        with:
+          manifest-path: .github/updatecli/manifest.yaml
+          run-type: minor
+
+    
