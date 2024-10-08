@@ -61,7 +61,7 @@ runs:
       shell: bash
 
     - name: Create PR
-      if: steps.updatecli_apply.outputs.changes == 'true'
+      if: env.CHANGES == 'true'
       run: |
         git checkout $BRANCH_NAME
         gh pr create --base main --title $BRANCH_NAME -f --label soc2
