@@ -2,9 +2,7 @@
 name: Validate Changes to Workflow
 
 "on":
-  pull_request:
-    branches:
-      - main
+  pull_request: {}
 
 permissions: {}
 
@@ -23,5 +21,3 @@ jobs:
         with:
           manifest-path: .github/updatecli/manifest.yaml
           run-type: minor
-
-    
