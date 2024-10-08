@@ -60,20 +60,6 @@ runs:
         GITHUB_TOKEN: ${{ github.token }}
       shell: bash
 
-    - name: Install `helm-docs`
-      if: inputs.run-helm-docs == 'true' && env.CHANGES == 'true'
-      uses: jdx/mise-action@v2
-      with:
-        install_args: helm-docs
-
-    - name: Run `helm-docs`
-      if: inputs.run-helm-docs == 'true' && env.CHANGES == 'true'
-      run: |
-        helm-docs --template-files=README.md.gotmpl
-        git commit -am "helm-docs"
-        git push
-      shell: bash
-
     - name: Create PR
       if: steps.updatecli_apply.outputs.changes == 'true'
       run: |
