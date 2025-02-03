@@ -77,7 +77,7 @@ runs:
       if: env.CHANGES == 'true'
       run: |
         git checkout $BRANCH_NAME
-        gh pr create --base main --title $BRANCH_NAME -f --label automated-dependency-updates
+        gh pr create --base main --title $BRANCH_NAME -f --label automated-dependency-updates --label maintenance
       env:
         GH_TOKEN: ${{ github.token }}
       shell: bash
