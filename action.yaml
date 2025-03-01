@@ -40,7 +40,7 @@ runs:
       shell: bash
 
     - name: Install updatecli in the runner
-      uses: updatecli/updatecli-action@v2.77.0
+      uses: updatecli/updatecli-action@v2.78.1
 
     - name: Run updatecli in apply mode
       run: |
